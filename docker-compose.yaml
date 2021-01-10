@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mysql:
+    restart: always
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: mysql_db
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: rootpass
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./log/mysql:/var/log/mysql
+    ports:
+      - 3306:3306
+
+  api:
+    restart: always
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    container_name: api
+    tty: true
+    ports:
+      - '5000:5000'
+    environment:
+      TZ: 'Asia/Tokyo'
+      Flask_app: 'run.py'
+      FLASK_ENV: 'development'
+    command: flask run -h 0.0.0.0
