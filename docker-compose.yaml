@@ -19,12 +19,14 @@ services:
   api:
     restart: always
     build:
-      context: ./api
+      context: ./src
       dockerfile: ./Dockerfile
-    container_name: api
+    container_name: src
     tty: true
     ports:
       - '5000:5000'
+    volumes:
+      - "./src:/src"
     environment:
       TZ: 'Asia/Tokyo'
       Flask_app: 'run.py'
